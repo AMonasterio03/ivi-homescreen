@@ -67,6 +67,8 @@ class FlutterView {
    */
   void RunTasks();
 
+  void UpdateDisplayMetadata();
+
   /**
    * @brief Initialize
    * @return void

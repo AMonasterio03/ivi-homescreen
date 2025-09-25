@@ -34,7 +34,8 @@ WaylandWindow::WaylandWindow(const size_t index,
                              const uint32_t activation_area_width,
                              const uint32_t activation_area_height,
                              Backend* backend,
-                             const uint32_t ivi_surface_id)
+                             const uint32_t ivi_surface_id,
+                             FlutterView* view)
     : m_index(index),
       m_display(std::move(display)),
       m_wl_output(output),
@@ -49,7 +50,8 @@ WaylandWindow::WaylandWindow(const size_t index,
                          activation_area_width, activation_area_height}),
       m_window_size({width, height}),
       m_type(get_window_type(type)),
-      m_app_id(std::move(app_id)) {  // disable vsync
+      m_app_id(std::move(app_id)),
+      m_view(view) {  // disable vsync
   SPDLOG_TRACE("({}) + WaylandWindow()", m_index);
 
   m_base_surface = wl_compositor_create_surface(m_display->GetCompositor());
@@ -175,6 +177,10 @@ void WaylandWindow::handle_base_surface_enter(void* data,
       d->m_flutter_engine->SetPixelRatio(d->m_pixel_ratio * buffer_scale);
   if (result != kSuccess) {
     spdlog::error("Failed to set Flutter Engine Pixel Ratio");
+  } else {
+    if (d->m_view) {
+      d->m_view->UpdateDisplayMetadata();
+    }
   }
 }
 
