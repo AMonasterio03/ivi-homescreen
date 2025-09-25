@@ -33,6 +33,8 @@ class Display;
 
 class Engine;
 
+class FlutterView;
+
 class WaylandWindow {
  public:
   // a normal surface role is a regular application; a window_bg, window_panel
@@ -62,7 +64,8 @@ class WaylandWindow {
                 uint32_t activation_area_width,
                 uint32_t activation_area_height,
                 Backend* backend,
-                uint32_t ivi_surface_id);
+                uint32_t ivi_surface_id,
+                FlutterView* view = nullptr);
 
   ~WaylandWindow();
 
@@ -133,6 +136,7 @@ class WaylandWindow {
   uint32_t m_output_index;
   std::shared_ptr<Engine> m_flutter_engine;
   double m_pixel_ratio;
+  FlutterView* m_view;
   struct wl_surface* m_base_surface{};
   std::shared_ptr<Backend> m_backend;
   bool m_wait_for_configure{};
